@@ -1,1 +1,0 @@
-cmd_/home/vuln/linux_rootk1t_learning/lkm4_hideFile/lkm4_hideFile.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds --build-id  -o /home/vuln/linux_rootk1t_learning/lkm4_hideFile/lkm4_hideFile.ko /home/vuln/linux_rootk1t_learning/lkm4_hideFile/lkm4_hideFile.o /home/vuln/linux_rootk1t_learning/lkm4_hideFile/lkm4_hideFile.mod.o ;  true
