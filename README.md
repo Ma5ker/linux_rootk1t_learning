@@ -7,8 +7,6 @@ Tested on Ubuntu 16.04 32_bit ,kernel version v4.15.0-99.
 
   - https://github.com/f0rb1dd3n/Reptile
 
-  - https://github.com/mncoppola/suterus
-
 
 - Malicious Code Injection via /dev/mem
 
