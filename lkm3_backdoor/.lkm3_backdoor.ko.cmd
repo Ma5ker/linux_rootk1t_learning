@@ -1,0 +1,1 @@
+cmd_/home/vuln/linux_rootk1t_learning/lkm3_backdoor/lkm3_backdoor.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds --build-id  -o /home/vuln/linux_rootk1t_learning/lkm3_backdoor/lkm3_backdoor.ko /home/vuln/linux_rootk1t_learning/lkm3_backdoor/lkm3_backdoor.o /home/vuln/linux_rootk1t_learning/lkm3_backdoor/lkm3_backdoor.mod.o ;  true

